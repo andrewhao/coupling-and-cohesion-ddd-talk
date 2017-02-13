@@ -1,8 +1,8 @@
-# Highly Cohesive, Loosely Coupled & Very Awesome.
+class: middle
 
-A Domain-Driven approach to beautiful systems
+# Highly Cohesive,<br />Loosely Coupled<br />\(& Very Awesome\)
 
-    $ ruby -run -e httpd . -p 8080
+*A domain-driven approach to beautiful systems*
 
 ---
 
@@ -63,11 +63,15 @@ within: 5.miles, location: location)
 end
 ```
 
+---
+
 ## Hi, I'm Andrew
 
 Friendly neighborhood programmer at Carbon Five
 
 ---
+
+class: middle center
 
 ![Carbon Five](http://www.carbonfive.com/images/c5-logo-vertical.png)
 
