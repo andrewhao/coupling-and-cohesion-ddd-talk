@@ -38,7 +38,7 @@ class: middle
 
 ---
 
-class: middle
+class: middle background-color-code
 
 ```ruby
 class RidesController
@@ -56,7 +56,7 @@ end
 
 ---
 
-class: middle
+class: middle background-color-code
 
 ```ruby
 class RidesController
@@ -75,7 +75,7 @@ end
 
 ---
 
-class: middle
+class: middle background-color-code
 
 ```ruby
 class RidesController
@@ -95,7 +95,7 @@ end
 
 ---
 
-class: middle
+class: middle background-color-code
 
 ```ruby
 class RidesController
@@ -143,15 +143,18 @@ class: middle
 
 ## The evolution of a feature
 
-#### Feature: As a user, I want to hail a Delorean
+#### Feature: As a passenger, I want to hail a Delorean
 
-* ...and I want to charge a credit card
-
---
-* ...and the system should log to Google Analytics
+* So I can travel in time!
 
 --
-* ...and I want to also do food delivery
+* ...and my credit card will be charged
+
+--
+* ...and the system should log the event to Google Analytics
+
+--
+* ...and sometimes I want food delivery
 
 --
 * ...and I want to use our internal Driver Routing system
@@ -160,7 +163,7 @@ class: middle
 * ...and the Driver should receive a notification
 
 --
-* ...and sometimes we deliver puppies
+* ...and sometimes we do puppy promotions 🐶
 
 ---
 
@@ -178,7 +181,7 @@ Friendly neighborhood programmer at Carbon Five
 
 ---
 
-class: middle center
+class: middle center background-color-code
 
 ![Carbon Five](http://www.carbonfive.com/images/c5-logo-vertical.png)
 
@@ -212,12 +215,24 @@ near each other, are easily accessible.
 
 class: middle
 
+Placeholder image: low cohesion vs high cohesion
+
+---
+
+class: middle
+
 ## Loosely coupled
 
 Modules do not entangle themselves with other concerns in the world.
 
 Possible to evolve one area of the system independently or easily over
 the other.
+
+---
+
+class: middle
+
+Placeholder image: low coupling vs high coupling
 
 ---
 
@@ -229,9 +244,9 @@ class: middle centered background-image-contain
 
 class: middle
 
-## Introducing Domain-Driven Design!
+## Introducing Domain-Driven Design
 
-DDD is a set of principles, design tools, and code patterns.
+DDD is a set of principles, design tools, and code patterns!
 
 ---
 
@@ -378,9 +393,22 @@ class: middle center
 
 ---
 
+### Applying everything with a Context Map
+
+A **Context Map** gives us a place to see the current system as-is (the
+problem space), the strategic domains, and their dependencies.
+
+All smashed up together in one diagram!
+
+---
+
 #### Combining the concepts with a Context Map
 
 ### Step 1: Print out your UML diagram
+
+I like to generate mine with a gem like `railroady`
+
+If you have multiple systems, do this for each system.
 
 ---
 
@@ -388,17 +416,33 @@ class: middle center
 
 ### Step 2: Overlay your domains
 
+Take out a pen, or whiteboard marker and draw areas of your
+system that correspond to certain domains.
+
+You may even see some domains you haven't thought of before!
+
 ---
 
 #### Combining the concepts with a Context Map
 
 ### Step 3: Overlay your bounded contexts
 
+Next up - with a different color pen or marker, draw lines around system
+boundaries.
+
+You may also find other system boundaries like:
+
+* External cloud providers
+
 ---
 
 #### Combining the concepts with a Context Map
 
 ### Step 4: Add directional dependencies
+
+Now - between each boundary, we will want to make clear what things need
+other things. These things allow us to define the relationship each
+context have against each toher.
 
 ---
 
@@ -434,6 +478,7 @@ Thus this is a very natural place to draw a seam!
 
 ---
 
-## Prior Art & Helpful Resources
+## Prior Art
 
+* https://www.infoq.com/articles/ddd-contextmapping
 * http://gorodinski.com/blog/2013/04/29/sub-domains-and-bounded-contexts-in-domain-driven-design-ddd/
