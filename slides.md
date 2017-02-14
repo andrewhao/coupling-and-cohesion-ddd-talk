@@ -2,68 +2,175 @@ class: middle
 
 # Highly Cohesive,<br />Loosely Coupled<br />\(& Very Awesome\)
 
-*A domain-driven approach to beautiful systems*
+#### A domain-driven approach to beautiful systems
 
 ---
 
-## Let's imagine tonight:
+class: middle
+
+## Let's imagine tonight
 
 We work at a hot new startup: Delorean. The Uber for time-travel!
 
+# 💁⏳🚖🙋
+
 ---
+
+class: middle
 
 ## OMG it's making so much money!
 
-We're releasing features right and left!
+🔥 We're releasing features right and left! 💵
 
 ---
+
+class: middle
 
 ## But the code is a mess!
 
-Feature pressure - let's release!
-We took some shortcuts. Okay, we took a lot of shortcuts.
+As systems grow, they naturally want to decompose...
 
 ---
 
-## Rails isn't helping, either!
+class: middle
 
-As the monolith grows, feature code is scattered across the app.
-
-Where did that file go?
+## Proliferation of code
 
 ---
 
-## So here we are...
-
-Features take forever to release
-
-Regressions are high
-
-The code is really hard to untangle.
-
----
-
-## Let's peek at a controller
+class: middle
 
 ```ruby
 class RidesController
   def create
-    passenger = Passenger.find_by(params[:id])
-    location = GeographicPoint.from(params[:longitude], params[:latitude])
-    if (params[:request_type] == :food)
-      food = Food.find(params[:food])
-      driver = Driver.where(available: true, delivering_food: food,
-within: 5.miles, location: location)
-    end
-    driver = Driver.where(available: true, within: 5.miles, location: location)
-    driver.send_notification!
-    Analytics.create(:ride_event)
-    passenger.charge_credit_card!
+    passenger = Passenger.find(params[:passenger_id])
+    driver = Driver.where(
+      available: true,
+      longitude: params[:longitude],
+      latitude: params[:latitude]
+    ).first
+    driver.send_to!(passenger)
   end
 end
 ```
 
 ---
+
+class: middle
+
+```ruby
+class RidesController
+  def create
+    passenger = Passenger.find(params[:passenger_id])
+    driver = Driver.where(
+      available: true,
+      longitude: params[:longitude],
+      latitude: params[:latitude]
+    ).first
+    passenger.charge_credit_card!
+    driver.send_to!(passenger)
+  end
+end
+```
+
+---
+
+class: middle
+
+```ruby
+class RidesController
+  def create
+    passenger = Passenger.find(params[:passenger_id])
+    driver = Driver.where(
+      available: true,
+      longitude: params[:longitude],
+      latitude: params[:latitude]
+    ).first
+    passenger.charge_credit_card!
+    Analytics.log_ride_created!
+    driver.send_to!(passenger)
+  end
+end
+```
+
+---
+
+class: middle
+
+```ruby
+class RidesController
+  def create
+    passenger = Passenger.find(params[:passenger_id])
+    is_food = params[:ride_type] == 'food'
+    driver = Driver.where(
+      can_food_delivery: is_food,
+      # ...
+    ).first
+    restaurant = Restaurant.find_by(meal_type: params[:meal_type])
+    passenger.charge_credit_card!
+    Analytics.log_ride_created!
+    driver.itinerary.add(restaurant)
+    driver.itinerary.add(passenger)
+  end
+end
+```
+
+---
+
+## Code clutter in Rails
+
+As the monolith grows, feature code is scattered across the app.
+
+```
+app/
+  controllers/rides_controller.rb
+  models/ride.rb
+  helpers/ride_helper.rb
+  services/do_a_ride_thing.rb
+```
+
+---
+
+class: middle
+
+## So here we are...
+
+* Features take forever to release
+* Regressions are high
+* The code is really hard to untangle.
+
+---
+
+## The evolution of a feature
+
+#### Feature: As a user, I want to hail a Delorean
+
+* ...and I want to charge a credit card
+
+--
+* ...and the system should log to Google Analytics
+
+--
+* ...and I want to also do food delivery
+
+--
+* ...and I want to use our internal Driver Routing system
+
+--
+* ...and the Driver should receive a notification
+
+--
+* ...and sometimes we deliver puppies
+
+---
+
+class: middle center
+
+# 😭
+
+---
+
+class: middle center
 
 ## Hi, I'm Andrew
 
@@ -77,19 +184,35 @@ class: middle center
 
 ---
 
-## Beautiful systems are:
+class: middle center
 
-...highly cohesive.
+### Beautiful systems
+---
+
+class: middle center
+
+### Beautiful systems are *highly cohesive*
+
+---
+
+class: middle center
+
+### Beautiful systems are *loosely coupled*
+
+---
+
+class: middle
+
+## Highly cohesive
 
 Modules and their related entities are all organized to live logically
 near each other, are easily accessible.
 
 ---
 
+class: middle
 
-## Beautiful systems are:
-
-...loosely coupled.
+## Loosely coupled
 
 Modules do not entangle themselves with other concerns in the world.
 Possible to evolve one area of the system independently or easily over
@@ -97,29 +220,41 @@ the other.
 
 ---
 
+class: middle centered background-image-contain
+
+![Cohesion and coupling](images/cohesion-coupling-diagram.gif)
+
+---
+
+class: middle
+
 ## Introducing Domain-Driven Design!
 
 DDD is a set of principles, design tools, and code patterns.
 
-It's more like an umbrella of various thoughts
+---
+
+class: middle
+
+### It is *not* a (coding) framework
+
+--
+### It is *not* technology-specific
+
+--
+### It is *not* prescriptive
 
 ---
 
-## It is *not*
-
-- A framework
-- Technology-specific
-- Prescriptive
-
----
-
-### Our goals today
+## Our goals today
 
 Introduce Just Enough concepts from DDD to give us the right insights to draw boundaries in our code!
 
-Also known as: __Strategic Design__
+---
 
-Let's just jump into it!
+class: middle center
+
+## __Strategic Design__
 
 ---
 
