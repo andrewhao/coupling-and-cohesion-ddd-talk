@@ -12,7 +12,7 @@ class: middle
 
 We work at a hot new startup: Delorean. The Uber for time-travel!
 
-# 💁⏳🚖🙋
+## 💁⏳🚖🙋
 
 ---
 
@@ -169,7 +169,7 @@ class: middle
 
 class: middle center
 
-# 😭
+## 😭
 
 ---
 
