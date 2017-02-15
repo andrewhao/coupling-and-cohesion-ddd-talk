@@ -438,7 +438,8 @@ We may notice a few things:
 --
 
 * One bounded context contains multiple sub-(supporting) domains
-* There are dependencies everywhere!
+* There are dependencies everywhere. Note upstream vs downstream
+  dependencies. These are communication bottlenecks.
 
 ---
 
@@ -451,6 +452,116 @@ We may notice a few things:
 
 ---
 
+#### Apply It! ⚡️
+
+## Break your application into domain modules
+
+Incremental refactoring - do this slowly
+
+---
+
+class: middle background-color-code
+
+```ruby
+class Trip < ActiveRecord::Base
+  belongs_to :vehicle
+  belongs_to :passenger
+  belongs_to :driver
+end
+
+class TripsController < ApplicationController
+  # ...
+end
+```
+
+---
+
+class: middle background-color-code
+
+```ruby
+module Ridesharing
+  class Trip < ActiveRecord::Base
+    belongs_to :vehicle
+    belongs_to :passenger
+    belongs_to :driver
+  end
+end
+
+module Ridesharing
+  class TripsController < ApplicationController
+    # ...
+  end
+end
+```
+
+---
+
+Find references to newly modulized classes and change them.
+
+---
+
+class: middle background-color-code
+
+```ruby
+class Invoice
+  belongs_to :trip
+end
+```
+
+---
+
+class: middle background-color-code
+
+```ruby
+class Invoice
+  belongs_to :trip, class_name: Ridesharing::Trip
+end
+```
+
+---
+
+## Now smush them together into a domain folder
+
+```
+app/domains/ridesharing/trip.rb
+app/domains/ridesharing/service_tier.rb
+app/domains/ridesharing/vehicle.rb
+app/domains/ridesharing/trips_controller.rb
+```
+
+---
+
+Placeholder image for files in folders moving to new locations.
+
+---
+
+## Modulizing increases cohesion
+
+Now we've modulized the code and moved everything to logically fit
+together, what more can we do?
+
+---
+
+## Decrease coupling by introducing aggregate roots
+
+(Maybe keep these slides??)
+
+---
+
+## Aggregate Roots
+
+A root node of a tree of entities that logically belong together.
+
+---
+
+Ship these aggregates around together!
+
+---
+
+Introduce an Adapter between domains when you do calls.
+
+---
+
 ## Extra insight
 
 Conway's Law + Subdomains + Bounded Contexts are sometimes in a 1:1:1
@@ -460,6 +571,15 @@ and has likely reduced its dependencies on other organizational units.
 --
 
 Thus this is a very natural place to draw a seam!
+
+---
+
+## Warning: Limitations apply!
+
+Don't try to do this on every project!
+
+I've been guilty of overdesigning. Here's what you can do: spike it out.
+See how it feels and fits. Back it out if it doesn't work for you.
 
 ---
 
