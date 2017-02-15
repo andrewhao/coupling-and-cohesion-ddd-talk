@@ -244,7 +244,7 @@ class: middle centered background-image-contain
 
 #### Apply It! ⚡️
 
-## Visualize Your System
+## Step 1: Visualize Your System
 
 Let's generate an ERD diagram!
 
@@ -342,21 +342,7 @@ class: middle
 
 #### Apply It! ⚡️
 
-## Write down your domains
-
-Sit down with stakeholders and map out your core and supporting domains.
-
----
-
-Placeholder picture of piece of paper and a list of words
-
----
-
-class: middle
-
-#### Apply It! ⚡️
-
-## Draw domains on your diagram
+## Step 2: Draw domains on your diagram
 
 Overlay your domains on top of the ERD diagram
 
@@ -390,13 +376,41 @@ different concepts, and hence different Ubiqutious Languages.
 
 ---
 
-class: middle center
+#### Apply It! ⚡️
 
-### I may have confused you.
+## Step 3: Overlay your bounded contexts
+
+Next up - with a different color pen or marker, draw lines around system
+boundaries / bounded contexts.
+
+--
+
+You may also find other system boundaries like:
+
+* External cloud providers
+* Other teams' services
 
 ---
 
-### Applying everything with a Context Map
+Placeholder image for bounded context diagram
+
+---
+
+#### Apply It! ⚡️
+
+## Step 4: Add directional dependencies
+
+Now - between each boundary, we will want to make clear what things need
+other things. These things allow us to define the relationship each
+context have against each toher.
+
+---
+
+Placeholder directional dependencies added
+
+---
+
+## Congrats! You just made a Context Map!
 
 A **Context Map** gives us a place to see the current system as-is (the
 problem space), the strategic domains, and their dependencies.
@@ -405,33 +419,7 @@ All smashed up together in one diagram!
 
 ---
 
-
----
-
-#### Combining the concepts with a Context Map
-
-### Step 3: Overlay your bounded contexts
-
-Next up - with a different color pen or marker, draw lines around system
-boundaries.
-
-You may also find other system boundaries like:
-
-* External cloud providers
-
----
-
-#### Combining the concepts with a Context Map
-
-### Step 4: Add directional dependencies
-
-Now - between each boundary, we will want to make clear what things need
-other things. These things allow us to define the relationship each
-context have against each toher.
-
----
-
-## Making sense of this
+## Making sense of the Context Map
 
 We may notice a few things:
 
@@ -542,15 +530,37 @@ together, what more can we do?
 
 ---
 
-## Decrease coupling by introducing aggregate roots
-
-(Maybe keep these slides??)
+#### (Also: Shared Kernel)
 
 ---
 
-## Aggregate Roots
+## Decrease coupling by introducing aggregate roots
 
-A root node of a tree of entities that logically belong together.
+Prevent data access from other domains to things that aren't ARs.
+
+You can have multiple ARs.
+
+---
+
+## Break AR relationships to use ARs
+
+Stop linking things willy-nilly through too many AR relationships.
+
+---
+
+## Provide Adapters and Repositories
+
+How? Through Adapter/Repository pattern.
+
+Or a simple Service that performs an operation in another domain.
+
+---
+
+## Decrease coupling by publishing events for async dependencies
+
+How? By implementing event-driven frameworks like Wisper.
+
+Async domains perform well here!
 
 ---
 
