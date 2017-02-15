@@ -242,11 +242,34 @@ class: middle centered background-image-contain
 
 ---
 
+#### Apply It! ⚡️
+
+## Visualize Your System
+
+Let's generate an ERD diagram!
+
+I like to generate mine with a gem like [`railroady`](https://github.com/preston/railroady) or
+[`rails-erd`](https://github.com/voormedia/rails-erd)
+
+If you have multiple systems, do this for each system.
+
+---
+
+Placeholder for Railroady UML diagram
+
+---
+
+class: middle center
+
+### Yikes.
+
+---
+
 class: middle
 
 ## Introducing Domain-Driven Design
 
-DDD is a set of principles, design tools, and code patterns!
+DDD is both a set of high-level design practices and specific software patterns
 
 ---
 
@@ -270,17 +293,15 @@ class: middle
 
 --
 
-🔍 See our system for what it truly is
+👓 See our system for what it truly is
 
 ---
 
 class: middle center
 
-### Also known as "Strategic Design"
+## Strategic Design
 
 ---
-
-class: middle
 
 ## Core domain
 
@@ -288,33 +309,69 @@ The **Core Domain** is the thing that your business does that makes it unique.
 
 --
 
-Delorean Core Domain: *Ridesharing*
+Delorean Core Domain: **Transportation**
 
 ---
 
-class: middle
-
 ## Supporting domains
 
-A **Supporting Domain** (or Subdomain) are the functions of the business
-that play incidental roles in making the **Core Domain** happen.
+A **Supporting Domain** (or Subdomain) are the areas of the business
+that play roles in making the **Core Domain** happen.
 
 --
 
 _Delorean Supporting Domains:_
 
 * **Driver Routing** (route me from X to Y)
+
+--
 * **Notifications** (push notifications)
+
+--
 * **Financial Transactions** (charge the card)
-* **Product Analytics** (analysis of business metrics)
+
+--
+* **Product Analytics** (track business metrics)
+
+--
+* **Customer Support** (keep people happy)
 
 ---
 
 class: middle
 
-## Apply It! ⚡️ Write down your domains
+#### Apply It! ⚡️
+
+## Write down your domains
 
 Sit down with stakeholders and map out your core and supporting domains.
+
+---
+
+Placeholder picture of piece of paper and a list of words
+
+---
+
+class: middle
+
+#### Apply It! ⚡️
+
+## Draw domains on your diagram
+
+Overlay your domains on top of the ERD diagram
+
+You might discover some domains you never even thought you had!
+
+???
+
+Take out a pen, or whiteboard marker and draw areas of your
+system that correspond to certain domains.
+
+You may even see some domains you haven't thought of before!
+
+---
+
+Placeholder image of ERD diagram + domain overlays
 
 ---
 
@@ -348,7 +405,9 @@ the domain**
 
 ---
 
-## Apply It! ⚡️ Maintain a Glossary
+#### Apply It! ⚡️
+
+## Maintain a Glossary
 
 A Glossary is simply a list of terms and definitions that apply to each
 of your business contexts.
@@ -363,7 +422,9 @@ And your Trip Routing engineering team might have another Glossary:
 
 ---
 
-## Apply It! ⚡️ Use consistent terms in code
+#### Apply It! ⚡️
+
+## Use consistent terms in code
 
 If you see discrepancies in the code, fix it!
 
@@ -402,24 +463,6 @@ All smashed up together in one diagram!
 
 ---
 
-#### Combining the concepts with a Context Map
-
-### Step 1: Print out your UML diagram
-
-I like to generate mine with a gem like `railroady`
-
-If you have multiple systems, do this for each system.
-
----
-
-#### Combining the concepts with a Context Map
-
-### Step 2: Overlay your domains
-
-Take out a pen, or whiteboard marker and draw areas of your
-system that correspond to certain domains.
-
-You may even see some domains you haven't thought of before!
 
 ---
 
