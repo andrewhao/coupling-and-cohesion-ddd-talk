@@ -32,16 +32,18 @@ As systems grow, they naturally fall into disarray...
 
 ---
 
-class: middle
+## The evolution of a feature
 
-## Proliferation of code
+#### Feature: As a passenger, I want to hail a Delorean
+
+* So I can travel in time!
 
 ---
 
 class: middle background-color-code
 
 ```ruby
-class RidesController
+class TripsController
   def create
     passenger = Passenger.find(params[:passenger_id])
     driver = Driver.where(
@@ -56,10 +58,19 @@ end
 
 ---
 
+## The evolution of a feature
+
+#### Feature: As a passenger, I want to hail a Delorean
+
+* So I can travel in time!
+* ...and my credit card will be charged
+
+---
+
 class: middle background-color-code
 
 ```ruby
-class RidesController
+class TripsController
   def create
     passenger = Passenger.find(params[:passenger_id])
     driver = Driver.where(
@@ -67,7 +78,7 @@ class RidesController
       longitude: params[:longitude],
       latitude: params[:latitude]
     ).first
-    passenger.charge_credit_card!
+    BraintreeService.charge(passenger)
     driver.send_to!(passenger)
   end
 end
@@ -75,10 +86,19 @@ end
 
 ---
 
+## The evolution of a feature
+
+#### Feature: As a passenger, I want to hail a Delorean
+
+* So I can travel in time!
+* ...and my credit card will be charged
+* ...and the system should log the event to Google Analytics
+---
+
 class: middle background-color-code
 
 ```ruby
-class RidesController
+class TripsController
   def create
     passenger = Passenger.find(params[:passenger_id])
     driver = Driver.where(
@@ -86,8 +106,8 @@ class RidesController
       longitude: params[:longitude],
       latitude: params[:latitude]
     ).first
-    passenger.charge_credit_card!
-    Analytics.log_ride_created!
+    BraintreeService.charge(passenger)
+    AnalyticsService.log_ride_created!
     driver.send_to!(passenger)
   end
 end
@@ -95,10 +115,21 @@ end
 
 ---
 
+## The evolution of a feature
+
+#### Feature: As a passenger, I want to hail a Delorean
+
+* So I can travel in time!
+* ...and my credit card will be charged
+* ...and the system should log the event to Google Analytics
+* ...and we should totally also do food delivery
+
+---
+
 class: middle background-color-code
 
 ```ruby
-class RidesController
+class TripsController
   def create
     passenger = Passenger.find(params[:passenger_id])
     is_food = params[:ride_type] == 'food'
@@ -107,8 +138,8 @@ class RidesController
       # ...
     ).first
     restaurant = Restaurant.find_by(meal_type: params[:meal_type])
-    passenger.charge_credit_card!
-    Analytics.log_ride_created!
+    BraintreeService.charge(passenger)
+    AnalyticsService.log_ride_created!
     driver.itinerary.add(restaurant)
     driver.itinerary.add(passenger)
   end
@@ -131,29 +162,31 @@ app/
 
 ---
 
-## The evolution of a feature
+## Code clutter in Rails
 
-#### Feature: As a passenger, I want to hail a Delorean
+As the monolith grows, feature code is scattered across the app.
 
-* So I can travel in time!
+```
+app/
+  controllers/restaurants_controller.rb
+  models/restaurant.rb
+  models/meal.rb
+  helpers/restaurant_helper.rb
+  services/calculate_meal_cost.rb
+```
 
---
-* ...and my credit card will be charged
+---
 
---
-* ...and the system should log the event to Google Analytics
+## Code clutter in Rails
 
---
-* ...and sometimes I want food delivery
+As the monolith grows, feature code is scattered across the app.
 
---
-* ...and I want to use our internal Driver Routing system
-
---
-* ...and the Driver should receive a notification
-
---
-* ...and sometimes we do puppy promotions 🐶
+```
+app/
+  controllers/puppy_deliveries_controller.rb
+  models/puppy_delivery.rb
+  models/animal_shelter.rb
+```
 
 ---
 
@@ -161,9 +194,9 @@ class: middle
 
 ## So here we are...
 
-* Features take forever to release
+* The code is tangled & difficult to change
 * Regressions are common
-* The code is really... tangled.
+* Features take forever to build & release
 
 ---
 
@@ -209,14 +242,15 @@ class: middle
 
 ## Highly cohesive
 
-Modules and their related entities are all organized to live logically
-near each other, are easily accessible.
+Elements of a module are strongly related to each other
+
+Near each other, are easily accessible.
 
 ---
 
-class: middle
+class: middle center background-image-contain
 
-Placeholder image: low cohesion vs high cohesion
+![Cohesion illustration](images/cohesion_illustration.png)
 
 ---
 
@@ -224,22 +258,21 @@ class: middle
 
 ## Loosely coupled
 
-Modules do not entangle themselves with other concerns in the world.
+Modules minimize their dependencies so that they are easily modifiable
 
-Possible to evolve one area of the system independently or easily over
-the other.
+--
+
+Can evolve independently of other modules in the system
+
+???
+
+"The more that we must know of module B in order to understand module A, the more closely connected A is to B"
 
 ---
 
-class: middle
+class: middle center background-image-contain
 
-Placeholder image: low coupling vs high coupling
-
----
-
-class: middle centered background-image-contain
-
-![Cohesion and coupling](images/cohesion-coupling-diagram.gif)
+![Coupling illustration](images/coupling_illustration.png)
 
 ---
 
@@ -248,6 +281,13 @@ class: middle
 ## Introducing Domain-Driven Design
 
 DDD is both a set of high-level design practices and specific software patterns
+
+???
+
+First came out as a book in 2003: Domain Driven Design by Eric Evans.
+
+It can be very confusing as it's got a lot of concepts and
+enterprise-speak.
 
 ---
 
@@ -271,13 +311,23 @@ class: middle
 
 --
 
-👓 See our system for what it truly is
+👓 See our system from a **domain perspective**
+
+???
+
+We'll learn to see the software from the business domain perspective
+
+Visualization is important: you can't improve what you can't see!
 
 ---
 
 class: middle center
 
 ## Strategic Design
+
+???
+
+Everybody say "Strategic Design"
 
 ---
 
@@ -579,13 +629,24 @@ Introduce an Adapter between domains when you do calls.
 
 ## Extra insight
 
-Conway's Law + Subdomains + Bounded Contexts are sometimes in a 1:1:1
-ratio. The organization has optimized for communication within itself,
-and has likely reduced its dependencies on other organizational units.
+Conway's Law, paraphrased: "Software systems tend to look like the
+organizations that produce them"
+
+--
+
+DDD modeling oftentimes reveals domains that follow organizational
+layouts.
+
+Your software systems follow organizational optimizations.
 
 --
 
 Thus this is a very natural place to draw a seam!
+
+???
+
+The organization has optimized for communication within itself,
+and has likely reduced its dependencies on other organizational units.
 
 ---
 
@@ -593,12 +654,28 @@ Thus this is a very natural place to draw a seam!
 
 Don't try to do this on every project!
 
-I've been guilty of overdesigning. Here's what you can do: spike it out.
+--
+
+I've been guilty of overdesigning.
+
+--
+
+Try it out, step by step
+
+--
+
+Back it out if this doesn't "fit"
+
+???
+
+Here's what you can do: spike it out.
 See how it feels and fits. Back it out if it doesn't work for you.
 
 ---
 
 ## Prior Art
 
+* W. P. Stevens ; G. J. Myers ; L. L. Constantine. ["Structured Design"](http://ieeexplore.ieee.org/document/5388187/) - IBM Systems Journal, Vol 13 Issue 2, 1974
+* http://www.win.tue.nl/~wstomv/quotes/structured-design.html#6
 * https://www.infoq.com/articles/ddd-contextmapping
 * http://gorodinski.com/blog/2013/04/29/sub-domains-and-bounded-contexts-in-domain-driven-design-ddd/
