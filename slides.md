@@ -123,21 +123,11 @@ As the monolith grows, feature code is scattered across the app.
 
 ```
 app/
-  controllers/rides_controller.rb
-  models/ride.rb
-  helpers/ride_helper.rb
-  services/do_a_ride_thing.rb
+  controllers/trips_controller.rb
+  models/trip.rb
+  helpers/trip_helper.rb
+  services/calculate_trip_cost.rb
 ```
-
----
-
-class: middle
-
-## So here we are...
-
-* Features take forever to release
-* Regressions are high
-* The code is really hard to untangle.
 
 ---
 
@@ -167,6 +157,16 @@ class: middle
 
 ---
 
+class: middle
+
+## So here we are...
+
+* Features take forever to release
+* Regressions are common
+* The code is really... tangled.
+
+---
+
 class: middle center
 
 ## 😭
@@ -190,6 +190,7 @@ class: middle center background-color-code
 class: middle center
 
 ### Beautiful systems
+
 ---
 
 class: middle center
