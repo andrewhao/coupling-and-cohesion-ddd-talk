@@ -28,7 +28,7 @@ class: middle
 
 ## But the code is a mess!
 
-As systems grow, they naturally want to decompose...
+As systems grow, they naturally fall into disarray...
 
 ---
 
@@ -242,29 +242,6 @@ class: middle centered background-image-contain
 
 ---
 
-#### Apply It! ⚡️
-
-## Step 1: Visualize Your System
-
-Let's generate an ERD diagram!
-
-I like to generate mine with a gem like [`railroady`](https://github.com/preston/railroady) or
-[`rails-erd`](https://github.com/voormedia/rails-erd)
-
-If you have multiple systems, do this for each system.
-
----
-
-Placeholder for Railroady UML diagram
-
----
-
-class: middle center
-
-### Yikes.
-
----
-
 class: middle
 
 ## Introducing Domain-Driven Design
@@ -300,6 +277,29 @@ class: middle
 class: middle center
 
 ## Strategic Design
+
+---
+
+#### Apply It! ⚡️
+
+## Step 1: Visualize Your System
+
+Let's generate an ERD diagram!
+
+I like to generate mine with a gem like [`railroady`](https://github.com/preston/railroady) or
+[`rails-erd`](https://github.com/voormedia/rails-erd)
+
+If you have multiple systems, do this for each system.
+
+---
+
+Placeholder for Railroady UML diagram
+
+---
+
+class: middle center
+
+### Yikes.
 
 ---
 
@@ -366,10 +366,9 @@ Placeholder image of ERD diagram + domain overlays
 A **Bounded Context** is:
 
 - Concretely: a software system (like a codebase)
-- Linguistically: a delineation in your domain where terms are
-  "bounded", or have limited applicability.
+- Linguistically: a delineation in your domain where concepts are "bounded", or contained
 
---
+???
 
 Remember, this is because we agreed that different domains may have
 different concepts, and hence different Ubiqutious Languages.
@@ -388,7 +387,7 @@ boundaries / bounded contexts.
 You may also find other system boundaries like:
 
 * External cloud providers
-* Other teams' services
+* Other teams' services or systems
 
 ---
 
@@ -426,8 +425,11 @@ We may notice a few things:
 --
 
 * One bounded context contains multiple sub-(supporting) domains
-* There are dependencies everywhere. Note upstream vs downstream
-  dependencies. These are communication bottlenecks.
+* There are dependencies everywhere.
+
+???
+
+Note upstream vs downstream dependencies. These are communication bottlenecks.
 
 ---
 
@@ -509,6 +511,8 @@ end
 ---
 
 ## Now smush them together into a domain folder
+
+Vertical decomposition
 
 ```
 app/domains/ridesharing/trip.rb
