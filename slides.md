@@ -280,7 +280,7 @@ class: middle
 
 ## Introducing Domain-Driven Design
 
-DDD is both a set of high-level design practices and specific software patterns
+DDD is both a set of high-level design activities and specific software patterns
 
 ???
 
@@ -305,13 +305,29 @@ class: middle
 
 class: middle
 
+### It maps the software to the business
+
+--
+### It values precise language
+
+--
+### It values conversations
+
+---
+
+class: middle
+
 ## Our goals tonight
 
 ✏️ Learn insights to **draw boundaries** in our code!
 
 --
 
-👓 See our system from a **domain perspective**
+👓 **Visualize our system** from a domain perspective.
+
+--
+
+🛠 Do a little bit of **refactoring**.
 
 ???
 
@@ -325,9 +341,13 @@ class: middle center
 
 ## Strategic Design
 
+#### Through an exercise called Context Mapping
+
 ???
 
 Everybody say "Strategic Design"
+
+We are going to go through an exercise called Context Mapping.
 
 ---
 
@@ -344,7 +364,9 @@ If you have multiple systems, do this for each system.
 
 ---
 
-Placeholder for Railroady UML diagram
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd.png)
 
 ---
 
@@ -408,7 +430,16 @@ You may even see some domains you haven't thought of before!
 
 ---
 
-Placeholder image of ERD diagram + domain overlays
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd.png)
+
+---
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-2-domains.jpg)
 
 ---
 
@@ -442,21 +473,21 @@ You may also find other system boundaries like:
 
 ---
 
-Placeholder image for bounded context diagram
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-2-domains.jpg)
 
 ---
 
-#### Apply It! ⚡️
+class: middle center background-image-contain background-white
 
-## Step 4: Add directional dependencies
-
-Now - between each boundary, we will want to make clear what things need
-other things. These things allow us to define the relationship each
-context have against each toher.
+background-image: url(images/erd-3-bounded-context-simplified.png)
 
 ---
 
-Placeholder directional dependencies added
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-4-bounded-context-extended.png)
 
 ---
 
@@ -464,8 +495,6 @@ Placeholder directional dependencies added
 
 A **Context Map** gives us a place to see the current system as-is (the
 problem space), the strategic domains, and their dependencies.
-
-All smashed up together in one diagram!
 
 ---
 
@@ -476,7 +505,9 @@ We may notice a few things:
 --
 
 * One bounded context contains multiple sub-(supporting) domains
-* There are dependencies everywhere.
+
+--
+* One domain is spread out between multiple bounded contexts
 
 ???
 
@@ -484,12 +515,24 @@ Note upstream vs downstream dependencies. These are communication bottlenecks.
 
 ---
 
-## Here's where we want to get to:
+## An important design principle
 
-* Use a **Domain** as the ideal organizational module.
-* Refactor entities that belong there to move into that module
-* We will find that these entities naturally prefer each other, since
-  they live in the same organizational unit.
+Each **Domain** should have its own bounded context
+
+--
+
+We just found the areas where code "naturally" fits together, because
+they are serving the same business goal.
+
+Increased cohesion!
+
+???
+
+We just found the areas where code "naturally" fits together, because
+they are serving the same business goal.
+
+We will find that these entities naturally prefer each other, since
+they live in the same organizational unit.
 
 ---
 
@@ -497,7 +540,7 @@ Note upstream vs downstream dependencies. These are communication bottlenecks.
 
 ## Break your application into domain modules
 
-Incremental refactoring - do this slowly
+Incremental refactoring, using Ruby Modules to lead the way
 
 ---
 
