@@ -293,37 +293,13 @@ enterprise-speak.
 
 class: middle
 
-### It is *not* a (coding) framework
-
---
-### It is *not* technology-specific
-
---
-### It is *not* prescriptive
-
----
-
-class: middle
-
-### It maps the software to the business
-
---
-### It values precise language
-
---
-### It values conversations
-
----
-
-class: middle
-
 ## Our goals tonight
 
-✏️ Learn insights to **draw boundaries** in our code!
+👓 **Visualize our system** from a domain perspective.
 
 --
 
-👓 **Visualize our system** from a domain perspective.
+✏️ Learn insights to **draw boundaries** in our code!
 
 --
 
@@ -506,8 +482,20 @@ We may notice a few things:
 
 * One bounded context contains multiple sub-(supporting) domains
 
---
-* One domain is spread out between multiple bounded contexts
+---
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-4-bounded-context-extended.png)
+
+---
+
+## Making sense of the Context Map
+
+We may notice a few things:
+
+* One bounded context contains multiple sub-(supporting) domains
+* Multiple bounded contexts are required to support a single domain
 
 ???
 
@@ -515,16 +503,35 @@ Note upstream vs downstream dependencies. These are communication bottlenecks.
 
 ---
 
-## An important design principle
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-4-bounded-context-extended.png)
+
+---
+
+class: middle
+
+## An Ideal Architecture
 
 Each **Domain** should have its own bounded context
 
---
+Key concept in DDD!
+
+---
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/erd-5-bounded-context-ideal.png)
+
+---
+
+class: middle
+
+## Increased cohesion!
 
 We just found the areas where code "naturally" fits together, because
 they are serving the same business goal.
 
-Increased cohesion!
 
 ???
 
@@ -540,7 +547,7 @@ they live in the same organizational unit.
 
 ## Break your application into domain modules
 
-Incremental refactoring, using Ruby Modules to lead the way
+Incremental refactoring, using Ruby Modules to lead the way!
 
 ---
 
@@ -580,7 +587,31 @@ end
 
 ---
 
-Find references to newly modulized classes and change them.
+class: middle
+
+#### Find references to newly modulized classes and change them.
+
+---
+
+class: middle background-color-code
+
+```ruby
+# config/routes.rb
+
+resources :trips
+```
+
+---
+
+class: middle background-color-code
+
+```ruby
+# config/routes.rb
+
+namespace :ridesharing, path: '/' do
+  resources :trips
+end
+```
 
 ---
 
@@ -604,73 +635,200 @@ end
 
 ---
 
-## Now smush them together into a domain folder
-
-Vertical decomposition
+## Creating domain-oriented folders
 
 ```
 app/domains/ridesharing/trip.rb
 app/domains/ridesharing/service_tier.rb
 app/domains/ridesharing/vehicle.rb
 app/domains/ridesharing/trips_controller.rb
+app/domains/ridesharing/trips/show.html.erb
 ```
 
 ---
 
-Placeholder image for files in folders moving to new locations.
+class: middle center background-image-contain
+
+![Cohesion illustration](images/cohesion_illustration.png)
 
 ---
 
-## Modulizing increases cohesion
+class: middle center
 
-Now we've modulized the code and moved everything to logically fit
-together, what more can we do?
+## Hence: modulizing increases cohesion
 
----
-
-#### (Also: Shared Kernel)
+#### Let's move on to coupling...
 
 ---
 
-## Decrease coupling by introducing aggregate roots
+## ActiveRecord relationships can be abused!
 
-Prevent data access from other domains to things that aren't ARs.
+Objects start knowing too much about the entire world.
 
-You can have multiple ARs.
-
----
-
-## Break AR relationships to use ARs
-
-Stop linking things willy-nilly through too many AR relationships.
+"God Objects"
 
 ---
 
-## Provide Adapters and Repositories
+class: middle background-color-code
 
-How? Through Adapter/Repository pattern.
-
-Or a simple Service that performs an operation in another domain.
+```ruby
+class PaymentConfirmation
+  belongs_to :trip, class_name: Ridesharing::Trip
+  belongs_to :passenger, class_name: Ridesharing::Passenger
+  belongs_to :credit_card
+  has_many :menu_items
+  belongs_to :coupon_code
+  has_one :retriable_email_job
+  # ad infinitum...
+end
+```
 
 ---
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/aggregate-root-1.png)
+
+---
+
+class: middle
+
+## Aggregate Roots
+
+**Aggregate Roots** are top-level domain models that reveal an object
+graph of related entities beneath them.
+
+--
+
+Can be considered a **Facade**
+
+---
+
+class: middle center background-image-contain background-white
+
+background-image: url(images/aggregate-root-2.png)
+
+---
+
+## Decrease coupling by only exposing aggregate roots
+
+Make it a rule in your system that you may only access another domain's
+**Aggregate Root**.
+
+--
+
+Internally, it's OK to reach for whatever you need.
+
+---
+
+class: middle
+
+## Make service objects that provide Aggregate Roots
+
+Your source domain can provide a service (Adapter) that returns the
+**Aggregate Root**
+
+???
+
+Ship these around when communicating between domains!
+
+---
+
+class: middle background-color-code
+
+```ruby
+module Ridesharing
+  class FetchTrip
+    def call(id)
+      Trip
+        .includes(:passenger,
+                  :trip, ...)
+        .find(id)
+      # Alternatively, return something custom
+      # OpenStruct.new(trip: Trip.find(id), ...)
+    end
+  end
+end
+```
+
+---
+
+class: middle background-color-code
+
+```ruby
+class PaymentConfirmation
+  belongs_to :trip, class_name: Ridesharing::Trip
+  belongs_to :passenger, class_name: Ridesharing::Passenger
+  # ...
+end
+```
+
+---
+
+class: middle background-color-code
+
+```ruby
+class PaymentConfirmation
+  def trip
+    # Returns the Trip aggregate root
+    Ridesharing::FetchTrip.new.find(payment_id)
+  end
+end
+
+# OLD: payment_confirmation.passenger
+# NEW: payment_confirmation.trip.passenger
+```
+
+---
+
+class: middle
 
 ## Decrease coupling by publishing events for async dependencies
-
-How? By implementing event-driven frameworks like Wisper.
 
 Async domains perform well here!
 
 ---
 
-Ship these aggregates around together!
+class: middle
+
+## Just send an event notifying the outside world!
+
+Instead of needing to know about the outside world, we simply
+publish an event.
 
 ---
 
-Introduce an Adapter between domains when you do calls.
+class: middle background-color-code
+
+```ruby
+# Old way
+class TripController
+  def create
+    # ...
+    ReallySpecificGoogleAnalyticsThing
+      .tag_manager_logging('trip_created',
+                           ENV['GA_ID'],
+                           trip)
+  end
+end
+```
 
 ---
 
-## Extra insight
+class: middle background-color-code
+
+```ruby
+class TripController
+  def create
+    # ...
+    EventPublisher.publish(:trip_created, trip.id)
+  end
+end
+```
+
+---
+
+## Conway's Law and DDD
 
 Conway's Law, paraphrased: "Software systems tend to look like the
 organizations that produce them"
@@ -713,6 +871,37 @@ Back it out if this doesn't "fit"
 
 Here's what you can do: spike it out.
 See how it feels and fits. Back it out if it doesn't work for you.
+
+---
+
+class: middle
+
+## What we did tonight
+
+👓 **Visualized our system** with a Context Map
+
+✏️   **Drew boundaries** in our code!
+
+🛠 Do a little bit of **refactoring** with domain modules, Aggregate
+Roots and Domain Events.
+
+---
+
+class: middle
+
+## Thanks!
+
+Github: [andrewhao](https://www.github.com/andrewhao)
+
+Twitter: [@andrewhao](https://www.twitter.com/andrewhao)
+
+Email: [andrew@carbonfive.com](mailto:andrew@carbonfive.com)
+
+---
+
+class: middle
+
+Sample code: [https://www.github.com/andrewhao/delorean](https://www.github.com/andrewhao/delorean)
 
 ---
 
