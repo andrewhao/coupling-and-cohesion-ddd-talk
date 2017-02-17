@@ -28,7 +28,7 @@ class: middle
 
 ## But the code is a mess!
 
-As systems grow, they naturally fall into disarray...
+As systems grow, they naturally want to fall into disarray...
 
 ---
 
@@ -513,7 +513,7 @@ class: middle
 
 ## An Ideal Architecture
 
-Each **Domain** should have its own bounded context
+Each **Domain** should have its own **Bounded Context**
 
 Key concept in DDD!
 
@@ -785,7 +785,7 @@ class: middle
 
 ## Decrease coupling by publishing events for async dependencies
 
-Async domains perform well here!
+Domains that only need unidirectional data flow work well here!
 
 ---
 
@@ -889,6 +889,12 @@ Roots and Domain Events.
 
 class: middle
 
+Sample code: [https://www.github.com/andrewhao/delorean](https://www.github.com/andrewhao/delorean)
+
+---
+
+class: middle
+
 ## Thanks!
 
 Github: [andrewhao](https://www.github.com/andrewhao)
@@ -899,15 +905,11 @@ Email: [andrew@carbonfive.com](mailto:andrew@carbonfive.com)
 
 ---
 
-class: middle
-
-Sample code: [https://www.github.com/andrewhao/delorean](https://www.github.com/andrewhao/delorean)
-
----
-
 ## Prior Art
 
 * W. P. Stevens ; G. J. Myers ; L. L. Constantine. ["Structured Design"](http://ieeexplore.ieee.org/document/5388187/) - IBM Systems Journal, Vol 13 Issue 2, 1974
+* Evans, Eric. [Domain Driven Design](https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)
+* Vernon, Vaughan. [Implementing Domain-Driven Design](https://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577)
 * http://www.win.tue.nl/~wstomv/quotes/structured-design.html#6
 * https://www.infoq.com/articles/ddd-contextmapping
 * http://gorodinski.com/blog/2013/04/29/sub-domains-and-bounded-contexts-in-domain-driven-design-ddd/
